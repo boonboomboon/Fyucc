@@ -1,0 +1,45 @@
+import React, { useEffect, useState } from 'react';
+
+const GoogleMapsApp = () => {
+  const [map, setMap] = useState(null);
+
+  useEffect(() => {
+    // Caricamento dell'API di Google Maps
+    const loadGoogleMapsScript = () => {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=TUA_API_KEY&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initMap;
+      document.head.appendChild(script);
+    };
+
+    // Inizializzazione della mappa
+    const initMap = () => {
+      const googleMap = new window.google.maps.Map(document.getElementById('map'), {
+        center: { lat: 40.7128, lng: -74.0060 }, // Coordinate di New York come esempio
+        zoom: 12,
+      });
+
+      setMap(googleMap);
+    };
+
+    // Caricamento dello script all'avvio del componente
+    loadGoogleMapsScript();
+
+    // Pulizia alla disattivazione del componente
+    return () => {
+      const script = document.querySelector('script[src^="https://maps.googleapis.com/maps/api/js"]');
+      script.remove();
+    };
+  }, []);
+
+  return (
+    <div>
+      <h1>Google Maps App</h1>
+      <div id="map" style={{ width: '100%', height: '400px' }}></div>
+    </div>
+  );
+};
+
+export default GoogleMapsApp;
